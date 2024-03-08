@@ -7,5 +7,10 @@
 <script setup>
 import { useI18n } from "vue-i18n"
 import { ref } from "vue";
+import {useAuthStore} from "stores/auth-store";
+
+const authUser = useAuthStore();
+
+authUser.fetchLoggedInUser();
 
 </script>

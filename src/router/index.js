@@ -47,8 +47,11 @@ export default route(function (/* { store, ssrContext } */) {
         next()
       }
     } else {
-      // If route does not require authentication, proceed with navigation
-      next()
+     if (accessKey && to.name === 'Login') {
+        next({ name: 'Home' })
+      } else {
+        next()
+      }
     }
   })
 
