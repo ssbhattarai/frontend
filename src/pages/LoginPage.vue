@@ -12,7 +12,8 @@ const router = useRouter();
 const onSubmit = () => {
   apiInstance.post('login', loginData.value).then(res => {
     $q.localStorage.set(process.env.ACCESS_KEY_NAME, res.data.access_token)
-    router.push({ name: 'Home'});
+    window.location.href = '/';
+    // router.push({ name: 'Home', replace: true});
   }).catch(error => {
     $q.notify({
       type: 'notify-error',

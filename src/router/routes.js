@@ -6,12 +6,14 @@ const routes = [
       {
         path: '',
         component: () => import('pages/IndexPage.vue'),
-        name: "Home"
+        name: "Home",
+        meta: { requiresAuth: true },
       },
       {
         path: '/users',
         component: () => import('pages/UsersPage.vue'),
-        name: "User"
+        name: "User",
+        meta: { requiresAuth: true },
       },
     ],
   },
@@ -19,11 +21,14 @@ const routes = [
   {
     path: '/admin/login',
     component: () => import('pages/LoginPage.vue'),
-    name: "Login"
+    name: "Login",
+    meta: { requiresAuth: false },
   },
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
+    component: () => import('pages/ErrorNotFound.vue'),
+    name: "Notfound",
+    meta: { requiresAuth: false  },
   }
 ]
 

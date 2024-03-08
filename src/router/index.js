@@ -2,6 +2,8 @@ import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
 import { LocalStorage } from 'quasar'
+import { LoadingBar } from 'quasar'
+
 
 
 /*
@@ -30,16 +32,28 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     const accessKey = LocalStorage.getItem(process.env.ACCESS_KEY_NAME)
+    const requiresAuth = to.meta.requiresAuth;
+    LoadingBar.start()
 
-    if (!accessKey && to.name !== 'Login') {
-      // If access key is not present and not navigating to login page
-      next({ name: 'Login' }); // Redirect to login page
-    } else if (accessKey && to.name === 'Login') {
-      // If access key is present and navigating to login page, redirect to Home
-      next({ name: 'Home' });
+    if (requiresAuth) {
+      if (!accessKey && to.name !== 'Login') {
+        // If access key is not present and not navigating to login page
+        next({ name: 'Login' }) // Redirect to login page
+      } else if (accessKey && to.name === 'Login') {
+        // If access key is present and navigating to login page, redirect to Home
+        next({ name: 'Home' })
+      } else {
+        // Proceed with navigation
+        next()
+      }
     } else {
-      next(); // Proceed with navigation
+      // If route does not require authentication, proceed with navigation
+      next()
     }
+  })
+
+  Router.afterEach(() => {
+    LoadingBar.stop()
   })
 
   return Router

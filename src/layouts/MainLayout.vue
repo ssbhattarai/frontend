@@ -14,7 +14,6 @@
         <q-toolbar-title>
            <span class="cursor-pointer" @click="goToHome"> {{ $t('app_title')}}</span>
         </q-toolbar-title>
-
           <q-select
             v-model="locale"
             :options="localeOptions"
@@ -28,6 +27,31 @@
             options-dense
             style="min-width: 150px"
           />
+        <q-separator dark vertical />
+
+        <q-btn-dropdown dense flat icon="settings" color="white">
+          <q-list>
+            <q-item clickable v-close-popup @click="onItemClick">
+              <q-item-section avatar>
+                <q-avatar icon="person" color="primary" text-color="white" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ $t('profile')}}</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-close-popup @click="logout">
+              <q-item-section avatar>
+                <q-avatar icon="logout" color="negative" text-color="white" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ $t('logout') }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+
+
       </q-toolbar>
     </q-header>
 
@@ -62,6 +86,9 @@ import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import { useI18n } from 'vue-i18n'
 import {useRouter} from "vue-router";
+import {api} from "boot/axios";
+import {useQuasar} from "quasar";
+
 
 
 const linksList = [
@@ -119,12 +146,21 @@ export default defineComponent({
     const leftDrawerOpen = ref(false)
     const { locale } = useI18n({ useScope: 'global' })
     const router  = useRouter();
+    const $q = useQuasar()
+
 
     const goToHome = () =>{
-      router.push({name: "Home"})
+        router.push({name: "Home"})
+    }
+    const logout = () => {
+      api.post('logout').then(res => {
+        $q.localStorage.remove(process.env.ACCESS_KEY_NAME);
+        router.push({name: "Login"});
+      })
     }
     return {
       goToHome,
+      logout,
       essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer () {

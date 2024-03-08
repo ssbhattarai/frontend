@@ -108,6 +108,10 @@ module.exports = configure(function (/* ctx */) {
         notify:{
           position: "top-right",
           progress: true
+        },
+        loadingBar: {
+          color: 'positive',
+          size: '7px',
         }
       },
 
@@ -125,6 +129,7 @@ module.exports = configure(function (/* ctx */) {
       plugins: [
         'Notify',
         'LocalStorage',
+        'LoadingBar'
       ]
     },
 
