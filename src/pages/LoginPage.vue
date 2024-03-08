@@ -30,7 +30,7 @@ const onReset = () => {
   <div class="my-container q-pa-md row justify-center items-center q-gutter-md">
     <q-card class="my-card">
       <q-card-section>
-        <span class="text-h4">Login</span>
+        <span class="text-h4">{{ $t('login')}}</span>
       </q-card-section>
       <q-separator />
       <q-card-section class="login-form">

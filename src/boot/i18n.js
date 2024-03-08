@@ -6,9 +6,12 @@ export default boot(({ app }) => {
   const i18n = createI18n({
     locale: 'en-US',
     globalInjection: true,
+    legacy: false,
+    fallbackLocale: "en-US",
     messages
   })
 
   // Set i18n instance on app
   app.use(i18n)
+  app.config.globalProperties.$t = i18n.global.t
 })

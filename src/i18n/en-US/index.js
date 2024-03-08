@@ -3,5 +3,9 @@
 
 export default {
   failed: 'Action failed',
-  success: 'Action was successful'
+  success: 'Action was successful',
+  login: "Login",
+  essential_links:"Essential Links",
+  app_title: "Admin portal",
+  users: "Users"
 }

@@ -12,10 +12,22 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+           <span class="cursor-pointer" @click="goToHome"> {{ $t('app_title')}}</span>
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+          <q-select
+            v-model="locale"
+            :options="localeOptions"
+            label="Quasar Language"
+            label-color="white"
+            dense
+            options-selected-class="text-primary"
+            borderless
+            emit-value
+            map-options
+            options-dense
+            style="min-width: 150px"
+          />
       </q-toolbar>
     </q-header>
 
@@ -28,7 +40,7 @@
         <q-item-label
           header
         >
-          Essential Links
+          {{ $t('essential_links')}}
         </q-item-label>
 
         <EssentialLink
@@ -48,13 +60,15 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+import { useI18n } from 'vue-i18n'
+import {useRouter} from "vue-router";
+
 
 const linksList = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'users',
+    icon: 'mdi-account-multiple',
+    link: "User"
   },
   {
     title: 'Github',
@@ -103,13 +117,24 @@ export default defineComponent({
 
   setup () {
     const leftDrawerOpen = ref(false)
+    const { locale } = useI18n({ useScope: 'global' })
+    const router  = useRouter();
 
+    const goToHome = () =>{
+      router.push({name: "Home"})
+    }
     return {
+      goToHome,
       essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      },
+      locale,
+      localeOptions: [
+        { value: 'en-US', label: 'English' },
+        { value: 'ne', label: 'नेपाली' }
+      ],
     }
   }
 })

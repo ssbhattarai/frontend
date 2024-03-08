@@ -1,17 +1,11 @@
 <template>
   <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
-    >
+    <p>{{ $t('success')}}</p>
   </q-page>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
+import { useI18n } from "vue-i18n"
+import { ref } from "vue";
 
-export default defineComponent({
-  name: 'IndexPage'
-})
 </script>
