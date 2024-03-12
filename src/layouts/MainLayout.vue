@@ -59,6 +59,8 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
+      :width="280"
+      :breakpoint="500"
     >
       <q-list>
         <q-item-label
@@ -67,11 +69,129 @@
           {{ $t('essential_links')}}
         </q-item-label>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+<!--        <EssentialLink-->
+<!--          v-for="link in essentialLinks"-->
+<!--          :key="link.title"-->
+<!--          v-bind="link"-->
+<!--        />-->
+        <q-scroll-area class="bg-white text-grey-9 rounded-borders"
+                       style="height: 200px; max-width: 300px;">
+          <q-list padding>
+
+            <template v-for="(item, i) in linksList" :key="i">
+              <q-item
+                clickable
+                v-ripple
+                class="GNL__drawer-item text-secondary"
+                :active="item.link === route.name"
+                :icon="item.icon"
+                :label="$t(item.title)"
+                :style="item.style"
+                :to="{ name: item.link }"
+                v-if="item.childs == null"
+              >
+                <q-item-section avatar>
+                  <q-icon v-if="item.icon" :name="item.icon"/>
+                  <q-icon v-if="item.img" :name="'img:' + item.img"/>
+                </q-item-section>
+
+                <q-item-section>
+                  <q-item-label>
+                    {{ $t(item.title) }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-expansion-item
+                clickable
+                class="GNL__drawer-item"
+                expand-separator
+                :label="$t(item.title)"
+                :icon="item.icon"
+                v-if="item.childs != null"
+              >
+                <template v-for="(childItem, j) in item.childs">
+                    <q-item
+                      :key="j"
+                      :to="{
+                      name: childItem.link,
+                      params: childItem.params,
+                      query: childItem.query
+                    }"
+                      clickable
+                      class="q-ml-md"
+                      v-close-popup
+                      :active="item.link === route.name"
+                      active-class="bg-grey-3 text-primary"
+                      v-if="childItem.childs == null
+                    "
+                    >
+                      <q-item-section side v-if="childItem.icon">
+                        <q-icon :name="childItem.icon" :color="route.name == childItem.link ? 'primary' : 'grey-6'"/>
+                      </q-item-section>
+                      <q-item-section side v-if="childItem.img">
+                        <q-avatar color="white" rounded>
+                          <q-icon
+                            size="30px"
+                            :name="'img:' + childItem.img"
+                            color="white"
+                          />
+                        </q-avatar>
+                      </q-item-section>
+
+                      <q-item-section>
+                        <q-item-label color="secondary"
+                        >{{ $t(childItem.title) }}
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                    <q-expansion-item
+                      :key="'btn-next' + j"
+                      clickable
+                      class="GNL__drawer-item q-ml-md"
+                      expand-separator
+                      :label="$t(childItem.title)"
+                      :icon="childItem.icon"
+                      v-else-if="childItem.childs != null ">
+                      <template v-for="(childchildItem, j) in childItem.childs">
+                        <template>
+                          <q-item
+                            :key="j"
+                            :to="{
+                            name: childchildItem.link,
+                            params: childchildItem.params,
+                            query: childchildItem.query
+                          }"
+                            clickable
+                            class="q-ml-md"
+                            v-close-popup
+                            v-if="childchildItem.childs == null"
+                          >
+                            <q-item-section side v-if="childchildItem.icon">
+                              <q-icon :name="childchildItem.icon" color="dark"/>
+                            </q-item-section>
+                            <q-item-section side v-if="childchildItem.img">
+                              <q-avatar color="white" rounded>
+                                <q-icon
+                                  size="30px"
+                                  :name="'img:' + childchildItem.img"
+                                  color="white"
+                                />
+                              </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                              <q-item-label color="primary"
+                              >{{ $t(childchildItem.title) }}
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                      </template>
+                    </q-expansion-item>
+                </template>
+              </q-expansion-item>
+            </template>
+          </q-list>
+        </q-scroll-area>
       </q-list>
     </q-drawer>
 
@@ -83,72 +203,41 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
 import { useI18n } from 'vue-i18n'
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {api} from "boot/axios";
 import {useQuasar} from "quasar";
 import {useAuthStore} from "stores/auth-store";
 
 
 
-const linksList = [
-  {
-    title: 'users',
-    icon: 'mdi-account-multiple',
-    link: "User"
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
 export default defineComponent({
   name: 'MainLayout',
-
-  components: {
-    EssentialLink
-  },
 
   setup () {
     const leftDrawerOpen = ref(false)
     const { locale } = useI18n({ useScope: 'global' })
     const router  = useRouter();
     const $q = useQuasar()
+    const route = useRoute();
+
     const authStore = useAuthStore();
+
+    const linksList = [
+      {
+        title: 'users_management',
+        icon: 'mdi-account-box-multiple',
+        link: "User",
+        childs: [
+          {
+            title: 'users',
+            icon: 'mdi-account-multiple',
+            link: "User",
+            childs: null
+          }
+        ],
+      },
+    ]
 
 
     const goToHome = () =>{
@@ -162,6 +251,7 @@ export default defineComponent({
     }
     return {
       authStore,
+      route,
       goToHome,
       logout,
       essentialLinks: linksList,
@@ -169,6 +259,7 @@ export default defineComponent({
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
+      linksList,
       locale,
       localeOptions: [
         { value: 'en-US', label: 'English' },

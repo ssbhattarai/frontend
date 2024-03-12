@@ -5,6 +5,8 @@ export default {
   essential_links: "आवश्यक लिङ्कहरू",
   app_title: "प्रशासन पोर्टल",
   users: "प्रयोगकर्ताहरू",
+  users_management: "प्रयोगकर्ता व्यवस्थापन",
+  record_not_found: "रेकर्ड फेला परेन",
 
   table: {
     name: "नाम",

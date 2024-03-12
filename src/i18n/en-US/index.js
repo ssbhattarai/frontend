@@ -8,6 +8,7 @@ export default {
   essential_links:"Essential Links",
   app_title: "Admin portal",
   users: "Users",
+  users_management: "User Management",
   record_not_found: "Record Not Found",
 
 
