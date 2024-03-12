@@ -7,6 +7,7 @@ export const useUserStore = defineStore('user', () => {
   commonStore.stateName = 'users';
 
   const all = computed(() => [...commonStore.all]);
+  const stateName = ref(commonStore.stateName);
   const serverPagination =  computed({
     get() {
       return commonStore.serverPagination
@@ -16,13 +17,24 @@ export const useUserStore = defineStore('user', () => {
       // commonStore.setServerPagination(value);
     },
   });
-  console.log(serverPagination)
-  const loading = ref(commonStore.loading);
+
+  const query =  computed({
+    get() {
+      return commonStore.query
+    },
+    set(value) {
+      commonStore.query = value;
+    },
+  });
+
+  const loading = computed(() => commonStore.loading);
 
   return {
     fetchData: commonStore.fetchData,
     serverPagination,
     all,
     loading,
+    stateName,
+    query
   }
 })

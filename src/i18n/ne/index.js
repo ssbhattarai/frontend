@@ -11,6 +11,8 @@ export default {
     email: "इमेल",
     created_date: "सिर्जना गरिएको मिति",
     role: "भूमिका",
-    rows_per_page: "प्रति पृष्ठ पङ्क्तिहरू: "
+    rows_per_page: "प्रति पृष्ठ पङ्क्तिहरू: ",
+    sn: "क्रम संख्या",
+    search: 'खोज्नुहोस्'
   }
 }

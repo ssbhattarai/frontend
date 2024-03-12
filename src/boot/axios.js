@@ -1,6 +1,7 @@
 import {boot} from 'quasar/wrappers'
 import axios from 'axios'
 import {LocalStorage, Notify} from "quasar";
+import { useRouter} from "vue-router";
 
 const api = axios.create({
   baseURL: process.env.BASE_URL,
@@ -10,6 +11,9 @@ const api = axios.create({
     'Authorization': 'Bearer ' + LocalStorage.getItem(process.env.ACCESS_KEY_NAME)
   },
 })
+
+const router =useRouter();
+
 api.interceptors.response.use(function (response) {
   // Any status code that lie within the range of 2xx cause this function to trigger
   // Do something with response data
@@ -33,6 +37,8 @@ api.interceptors.response.use(function (response) {
       timeout: 3000,
       color: "negative"
     });
+    LocalStorage.remove('access_key');
+    router.push({name: 'Login'});
   } else if (error.response && error.response.status === 422) {
     Notify.create({
       message: error.response.data.message ? error.response.data.message : "Invalid input",

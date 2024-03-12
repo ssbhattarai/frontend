@@ -16,6 +16,8 @@ export default {
     email: "Email",
     created_date: "Created date",
     role: "Role",
-    rows_per_page: "Rows per page: "
+    rows_per_page: "Rows per page: ",
+    sn: "S.N.",
+    search: 'Search'
   }
 }

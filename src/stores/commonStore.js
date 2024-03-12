@@ -14,16 +14,27 @@ export const useCommonStore = defineStore('common', () => {
     totalPage: 0,
     sortBy: null,
     descending: false,
-    rowsPerPage: 25
+    rowsPerPage: 15
   });
+  const query = ref(null);
+  const filters = ref({});
 
   const fetchData = () => {
     loading.value = true;
+    let filtersList = encodeURIComponent(JSON.stringify(filters.value));
+    var queryString = Object.keys(filters.value)
+      .map(key => {
+        let val = filters.value[key];
+        if (val && val !== "null") return key + "=" + filters.value[key];
+      })
+      .join("&");
     return new Promise((resolve, reject) => {
       api.get(stateName.value, {
         params: {
           page: serverPagination.value.page,
-          size: serverPagination.value.rowsPerPage
+          size: serverPagination.value.rowsPerPage,
+          filters: filtersList,
+          q: query.value
         }
       }).then(res => {
         all.value = res.data.data;
@@ -55,7 +66,9 @@ export const useCommonStore = defineStore('common', () => {
     fetchData,
     all,
     loading,
-    setServerPagination
+    setServerPagination,
+    filters,
+    query
   }
 })
 

@@ -40,7 +40,6 @@ const fetchUsers = () => {
 fetchUsers();
 function onRequest (props) {
   const { page, rowsPerPage, sortBy, descending } = props.pagination
-  const filter = props.filter
 
   userStore.serverPagination.page = page;
   userStore.serverPagination.rowsPerPage = rowsPerPage;
@@ -59,7 +58,7 @@ function onRequest (props) {
         row-key="id"
         v-model:pagination="userStore.serverPagination"
         :loading="userStore.loading"
-        :filter="filter"
+        :filter="userStore.query"
         binary-state-sort
         @request="onRequest"
         :rows-per-page-label="$t('table.rows_per_page')"
@@ -75,6 +74,15 @@ function onRequest (props) {
               {{ $t(col.label) }}
             </q-th>
           </q-tr>
+        </template>
+        <template #loading>
+          <q-inner-loading
+            showing
+            color="secondary"
+            label="Please wait..."
+            label-class="text-teal"
+            label-style="font-size: 1.1em"
+          />
         </template>
         <template v-slot:top-left>
           <div class="text-h6">{{ $t('users') }}</div>
@@ -110,7 +118,7 @@ function onRequest (props) {
           </q-tr>
         </template>
         <template v-slot:top-right>
-          <q-input outlined dense debounce="300" v-model="filter" placeholder="Search">
+          <q-input outlined dense debounce="300" v-model="userStore.query" :placeholder="$t('table.search')">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
