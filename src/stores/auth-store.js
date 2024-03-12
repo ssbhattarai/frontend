@@ -13,8 +13,9 @@ export const useAuthStore = defineStore('auth', {
       api.get('user').then(res => {
         this.user = res.data;
       }).catch(error => {
-        
+          this.router.push({name: "Login"})
       })
     },
   },
+  persist: true,
 });

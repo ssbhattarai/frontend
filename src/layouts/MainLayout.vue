@@ -15,7 +15,7 @@
            <span class="cursor-pointer" @click="goToHome"> {{ $t('app_title')}}</span>
         </q-toolbar-title>
           <q-select
-            v-model="locale"
+            v-model="$i18n.locale"
             :options="localeOptions"
             label="Quasar Language"
             label-color="white"
@@ -29,7 +29,7 @@
           />
         <q-separator dark vertical />
 
-        <q-btn-dropdown dense flat icon="settings" color="white">
+        <q-btn-dropdown dense flat :label="authStore.user.name" icon="mdi-account-circle" color="white">
           <q-list>
             <q-item clickable v-close-popup @click="onItemClick">
               <q-item-section avatar>
@@ -88,6 +88,7 @@ import { useI18n } from 'vue-i18n'
 import {useRouter} from "vue-router";
 import {api} from "boot/axios";
 import {useQuasar} from "quasar";
+import {useAuthStore} from "stores/auth-store";
 
 
 
@@ -147,6 +148,7 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' })
     const router  = useRouter();
     const $q = useQuasar()
+    const authStore = useAuthStore();
 
 
     const goToHome = () =>{
@@ -159,6 +161,7 @@ export default defineComponent({
       })
     }
     return {
+      authStore,
       goToHome,
       logout,
       essentialLinks: linksList,

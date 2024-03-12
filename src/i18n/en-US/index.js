@@ -7,5 +7,15 @@ export default {
   login: "Login",
   essential_links:"Essential Links",
   app_title: "Admin portal",
-  users: "Users"
+  users: "Users",
+  record_not_found: "Record Not Found",
+
+
+  table: {
+    name: "Name",
+    email: "Email",
+    created_date: "Created date",
+    role: "Role",
+    rows_per_page: "Rows per page: "
+  }
 }
