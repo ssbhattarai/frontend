@@ -1,14 +1,15 @@
 <script setup>
-import {ref, onMounted, computed, onBeforeMount} from 'vue'
+import {onBeforeMount, ref} from 'vue'
 import {useI18n} from 'vue-i18n'
-import {useUserStore} from "stores/user-store";
-import {api} from "boot/axios";
+import {usePermissionStore} from "stores/permission-store";
 
 
-const userStore = useUserStore();
-userStore.updateStateValue('users');
+const permissionStore = usePermissionStore();
+permissionStore.updateStateValue('permissions');
 
 const {t} = useI18n()
+
+
 
 const columns = [
   {
@@ -32,27 +33,19 @@ const columns = [
   {name: 'created_at', align: 'left', label: 'table.created_date', field: 'created_at', sortable: true}
 ]
 
-columns.push({
-  name: "actions",
-  align: "center",
-  label: "table.actions",
-  field: "actions",
-  sortable: false
-});
-
 const rows = ref([])
 const filter = ref('');
 
 const fetchUsers = () => {
-  userStore.fetchData();
+  permissionStore.fetchData();
 }
 fetchUsers();
 
 function onRequest(props) {
   const {page, rowsPerPage, sortBy, descending} = props.pagination
 
-  userStore.serverPagination.page = page;
-  userStore.serverPagination.rowsPerPage = rowsPerPage;
+  permissionStore.serverPagination.page = page;
+  permissionStore.serverPagination.rowsPerPage = rowsPerPage;
   fetchUsers();
 }
 
@@ -63,12 +56,12 @@ function onRequest(props) {
     <div class="q-pa-md">
       <q-table
         flat bordered
-        :rows="userStore.all"
+        :rows="permissionStore.all"
         :columns="columns"
         row-key="id"
-        v-model:pagination="userStore.serverPagination"
-        :loading="userStore.loading"
-        :filter="userStore.query"
+        v-model:pagination="permissionStore.serverPagination"
+        :loading="permissionStore.loading"
+        :filter="permissionStore.query"
         binary-state-sort
         @request="onRequest"
         :rows-per-page-label="$t('table.rows_per_page')"
@@ -95,7 +88,7 @@ function onRequest(props) {
           />
         </template>
         <template v-slot:top-left>
-          <div class="text-h6">{{ $t(userStore.title) }}</div>
+          <div class="text-h6">{{ $t(permissionStore.title) }}</div>
         </template>
         <template v-slot:no-data>
           <p style="font-size:12px">
@@ -108,10 +101,10 @@ function onRequest(props) {
             <q-td :props="props" key="id">
               {{
 
-                userStore.all.indexOf(props.row) +
+                permissionStore.all.indexOf(props.row) +
                 1 +
-                userStore.serverPagination.rowsPerPage *
-                (userStore.serverPagination.page - 1)
+                permissionStore.serverPagination.rowsPerPage *
+                (permissionStore.serverPagination.page - 1)
               }}
             </q-td>
             <q-td :props="props" key="name">
@@ -120,37 +113,16 @@ function onRequest(props) {
             <q-td :props="props" key="name">
               {{ props.row.email }}
             </q-td>
-            <q-td :props="props" key="role">
-              {{ props.row.roles }}
+            <q-td :props="props" key="name">
+              User
             </q-td>
             <q-td :props="props" key="created_at">
               {{ props.row.created_at }}
             </q-td>
-            <q-td :props="props" key="actions">
-              <div class="q-pa-md q-gutter-sm">
-                <q-btn round color="primary" dense icon="mdi-plus">
-                  <q-tooltip>
-                    {{ $t('tooltip.add', { name: $t('user') })}}
-                  </q-tooltip>
-                </q-btn>
-
-                <q-btn round color="secondary" dense icon="mdi-pencil">
-                  <q-tooltip>
-                    {{ $t('tooltip.edit', { name: $t('user') })}}
-                  </q-tooltip>
-                </q-btn>
-
-                <q-btn round color="negative" dense icon="mdi-delete">
-                  <q-tooltip>
-                    {{ $t('tooltip.delete', { name: $t('user') })}}
-                  </q-tooltip>
-                </q-btn>
-              </div>
-            </q-td>
           </q-tr>
         </template>
         <template v-slot:top-right>
-          <q-input outlined dense debounce="300" v-model="userStore.query" :placeholder="$t('table.search')">
+          <q-input outlined dense debounce="300" v-model="permissionStore.query" :placeholder="$t('table.search')">
             <template v-slot:append>
               <q-icon name="search"/>
             </template>

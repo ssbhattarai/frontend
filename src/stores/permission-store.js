@@ -1,45 +1,35 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 import {useCommonStore} from "stores/commonStore";
 import {computed, reactive, ref} from "vue";
 
-export const useUserStore = defineStore('user', () => {
+export const usePermissionStore = defineStore('permission', () => {
   const commonStore = useCommonStore();
 
   const all = computed(() => [...commonStore.all]);
   const stateName = ref(commonStore.stateName);
-  const serverPagination =  computed({
+  const serverPagination = computed({
     get() {
       return commonStore.serverPagination
-    },
-    set(value) {
+    }, set(value) {
       console.log('server pagination value', value);
       // commonStore.setServerPagination(value);
     },
   });
 
-  const query =  computed({
+  const query = computed({
     get() {
       return commonStore.query
-    },
-    set(value) {
+    }, set(value) {
       commonStore.query = value;
     },
   });
-
   const updateStateValue = (val) => {
     commonStore.stateName = val;
   };
-
   const loading = computed(() => commonStore.loading);
-  const title = 'users'
+  const title = 'permissions'
+
   return {
-    fetchData: commonStore.fetchData,
-    serverPagination,
-    all,
-    loading,
-    stateName,
-    query,
-    title,
-    updateStateValue
+    fetchData: commonStore.fetchData, serverPagination, all, loading, stateName, query, title, updateStateValue
   }
 })

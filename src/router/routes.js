@@ -15,6 +15,12 @@ const routes = [
         name: "User",
         meta: { requiresAuth: true },
       },
+      {
+        path: '/permissions',
+        component: () => import('pages/PermissionsPage.vue'),
+        name: "Permission",
+        meta: { requiresAuth: true },
+      },
     ],
   },
 
