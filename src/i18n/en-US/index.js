@@ -10,7 +10,8 @@ export default {
   users: 'Users',
   users_management: 'User Management',
   record_not_found: 'Record Not Found',
-  user: 'user',
+  user: 'User',
+  language: 'Language',
 
   table: {
     name: 'Name',

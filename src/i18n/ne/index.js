@@ -8,6 +8,7 @@ export default {
   users_management: 'प्रयोगकर्ता व्यवस्थापन',
   record_not_found: 'रेकर्ड फेला परेन',
   user: 'प्रयोगकर्ता',
+  language: 'भाषा',
 
   table: {
     name: 'नाम',

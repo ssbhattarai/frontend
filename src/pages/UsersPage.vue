@@ -127,7 +127,7 @@ function onRequest(props) {
               {{ props.row.created_at }}
             </q-td>
             <q-td :props="props" key="actions">
-              <div class="q-pa-md q-gutter-sm">
+              <div class="q-gutter-sm">
                 <q-btn round color="primary" dense icon="mdi-plus">
                   <q-tooltip>
                     {{ $t('tooltip.add', { name: $t('user') })}}

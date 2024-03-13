@@ -15,9 +15,9 @@
           <span class="cursor-pointer" @click="goToHome"> {{ $t('app_title') }}</span>
         </q-toolbar-title>
         <q-select
-          v-model="$i18n.locale"
+          v-model="locale"
           :options="localeOptions"
-          label="Quasar Language"
+          :label="$t('language')"
           label-color="white"
           dense
           options-selected-class="text-primary"
@@ -25,7 +25,7 @@
           emit-value
           map-options
           options-dense
-          style="min-width: 150px"
+          style="min-width: 100px; color:white"
         />
         <q-separator dark vertical/>
 
@@ -202,7 +202,7 @@
 </template>
 
 <script>
-import {defineComponent, ref} from 'vue'
+import {defineComponent, ref, watch} from 'vue'
 import {useI18n} from 'vue-i18n'
 import {useRoute, useRouter} from "vue-router";
 import {api} from "boot/axios";
@@ -214,11 +214,14 @@ export default defineComponent({
   name: 'MainLayout',
 
   setup() {
-    const leftDrawerOpen = ref(false)
-    const {locale} = useI18n({useScope: 'global'})
     const router = useRouter();
     const $q = useQuasar()
     const route = useRoute();
+    const leftDrawerOpen = ref(false)
+    const {locale} = useI18n({useScope: 'global'})
+
+    locale.value = $q.localStorage.has('lang') ? $q.localStorage.getItem('lang') : 'en-US'
+
 
     const authStore = useAuthStore();
 
@@ -244,6 +247,9 @@ export default defineComponent({
       },
     ]
 
+    const onChangeLocale = (e) => {
+      console.log(e.target.value);
+    }
 
     const goToHome = () => {
       router.push({name: "Home"})
@@ -254,7 +260,12 @@ export default defineComponent({
         router.push({name: "Login"});
       })
     }
+
+    watch(locale,  (newLang) => {
+      $q.localStorage.set('lang', newLang)
+    })
     return {
+      onChangeLocale,
       authStore,
       route,
       goToHome,
@@ -274,3 +285,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.q-field__native .row .items-center span {
+  color: white!important;
+}
+</style>
