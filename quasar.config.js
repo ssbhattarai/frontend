@@ -129,7 +129,8 @@ module.exports = configure(function (/* ctx */) {
       plugins: [
         'Notify',
         'LocalStorage',
-        'LoadingBar'
+        'LoadingBar',
+        'Dialog'
       ]
     },
 

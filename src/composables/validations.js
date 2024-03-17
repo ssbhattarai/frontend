@@ -1,8 +1,13 @@
 import { computed } from 'vue';
+import { useQuasar } from 'quasar'
+import {useI18n} from "vue-i18n";
 
 export function useCustomValidations() {
   // Validation Functions
+  const $q = useQuasar();
+  const { t } = useI18n();
 
+  const lang =  $q.localStorage.getItem('lang')
   const minLength = (propertyType, length) => {
     return (v) => (v && v.length >= length) || `${propertyType} must be at least ${length} characters`;
   };
@@ -18,7 +23,7 @@ export function useCustomValidations() {
   // Computed Property for Rules
 
   const rules = computed(() => ({
-    required: (value) => !!value || 'This field is required',
+    required: (value) => !!value || t('validations.required'),
 
     english_name: (value) => !!/^[a-zA-Z ]*$/.test(value) || 'अंग्रेजी अक्षरहरू मात्र स्वीकार गरिन्छ',
 
@@ -26,11 +31,11 @@ export function useCustomValidations() {
       /^.*(?=.*[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/.test(
         v
       ) ||
-      "Password must contain one lowercase, one uppercase, one special character",
+      t('validations.password_strength'),
 
     maxLength: (value, length) => (value.length > length ? `Maximum ${length} characters` : true),
     email: (v) =>
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(v) || "Invalid email format",
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(v) || t('validations.email_format'),
   }));
 
   // Return Functions and Computed Property

@@ -28,5 +28,19 @@ export default {
     edit: 'Edit {name}',
     add: 'Add new {name}',
     delete: 'Delete this {name}'
+  },
+  button: {
+    cancel: "Cancel",
+    submit: "Save"
+  },
+  form: {
+    name: "Name",
+    email: "Email",
+    password: "Password"
+  },
+  validations : {
+    required: "This field is required",
+    password_strength: "Password must contain one lowercase, one uppercase, one special character",
+    email_format: "Invalid email format"
   }
 }

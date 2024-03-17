@@ -25,5 +25,19 @@ export default {
     edit: '{name} सम्पादन गर्नुहोस्',
     add: 'नयाँ {name} थप्नुहोस्',
     delete: 'यो {name} मेटाउनुहोस्'
+  },
+  button: {
+    cancel: "रद्द गर्नुहोस्",
+    submit: "सेब गर्नुहोस्"
+  },
+  form: {
+    name: "नाम",
+    email: "इमेल",
+    password: "पासवर्ड"
+  },
+  validations : {
+    required: "यो क्षेत्र आवश्यक छ",
+    password_strength:"पासवर्डमा एउटा सानो, एउटा अपरकेस, एउटा विशेष क्यारेक्टर हुनुपर्छ",
+    email_format: "अवैध इमेल ढाँचा"
   }
 }

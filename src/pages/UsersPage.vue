@@ -2,14 +2,15 @@
 import {ref, onMounted, computed, onBeforeMount} from 'vue'
 import {useI18n} from 'vue-i18n'
 import {useUserStore} from "stores/user-store";
-import {api} from "boot/axios";
-
+import ResponsiveModal from "components/ResponsiveModal.vue";
+import {useCustomValidations} from "src/composables/validations";
 
 const userStore = useUserStore();
 userStore.updateStateValue('users');
 
 const {t} = useI18n()
 
+const {rules} = useCustomValidations();
 const columns = [
   {
     name: 'id',
@@ -42,7 +43,23 @@ columns.push({
 
 const rows = ref([])
 const filter = ref('');
-
+const openDialog = ref(false);
+const loading = ref(false);
+const user = ref({});
+const userModal = ref(null);
+const isPwd = ref(true);
+const saveFormData = () => {
+  userModal.value.validate().then(success => {
+    if (success) {
+      console.log(success, 'Success')
+    } else {
+      loading.value = false;
+    }
+  })
+}
+const createUser = () => {
+  openDialog.value = true;
+}
 const fetchUsers = () => {
   userStore.fetchData();
 }
@@ -128,7 +145,7 @@ function onRequest(props) {
             </q-td>
             <q-td :props="props" key="actions">
               <div class="q-gutter-sm">
-                <q-btn round color="primary" dense icon="mdi-plus">
+                <q-btn round color="primary" @click="createUser" dense icon="mdi-plus">
                   <q-tooltip>
                     {{ $t('tooltip.add', { name: $t('user') })}}
                   </q-tooltip>
@@ -159,9 +176,59 @@ function onRequest(props) {
 
       </q-table>
     </div>
+
+    <div>
+      <ResponsiveModal
+        v-model="openDialog"
+        :submitting="loading"
+        submit-button="submit"
+        @save="saveFormData()"
+        :width="'900px'"
+      >
+        <template #title>
+          {{ user.id ? $t('tooltip.edit', { name: $t('user') }) : $t('tooltip.add', { name: $t('user') }) }}
+        </template>
+        <template #body>
+          <q-form ref="userModal">
+          <div class="q-pa-md">
+            <div class="row q-col-gutter-sm">
+              <div class="col-6 col-md-6 col-sm-12">
+                <q-input
+                  outlined
+                  :label="$t('form.name') + ' *'"
+                  v-model="user.name"
+                  :rules="[rules.required]"
+                />
+              </div>
+              <div class="col-6 col-md-6 col-sm-12">
+                <q-input
+                  :label="$t('form.email') + ' *'"
+                  outlined
+                  v-model="user.email"
+                  :rules="[rules.required, rules.email]"
+                />
+              </div>
+              <div class="col-6 col-md-6 col-sm-12">
+                <q-input v-model="user.password" outlined :label="$t('form.password') + ' *'" :type="isPwd ? 'password' : 'text'" :rules="[rules.required, rules.password]">
+                  <template v-slot:append>
+                    <q-icon
+                      :name="isPwd ? 'visibility_off' : 'visibility'"
+                      class="cursor-pointer"
+                      @click="isPwd = !isPwd"
+                    />
+                  </template>
+                </q-input>
+              </div>
+            </div>
+
+          </div>
+          </q-form>
+        </template>
+      </ResponsiveModal>
+    </div>
   </q-page>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 
 </style>
