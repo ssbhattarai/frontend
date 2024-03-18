@@ -31,6 +31,12 @@ api.interceptors.response.use(function (response) {
       timeout: 3000,
       color: "negative"
     });
+  }else if (error.response && error.response.status === 403){
+    Notify.create({
+      message: error.response.data.message ? error.response.data.message : 'Unauthorized access',
+      timeout: 3000,
+      color: "negative"
+    });
   }else if (error.response && error.response.status === 401){
     Notify.create({
       message: error.response.data.message ? error.response.data.message : 'Unauthorized access',

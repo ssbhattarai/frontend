@@ -9,6 +9,8 @@ export default {
   record_not_found: 'रेकर्ड फेला परेन',
   user: 'प्रयोगकर्ता',
   language: 'भाषा',
+  permissions:'अनुमतिहरू',
+  permission: "अनुमति",
 
   table: {
     name: 'नाम',
@@ -18,7 +20,8 @@ export default {
     rows_per_page: 'प्रति पृष्ठ पङ्क्तिहरू: ',
     sn: 'क्रम संख्या',
     search: 'खोज्नुहोस्',
-    actions: 'कार्यहरू'
+    actions: 'कार्यहरू',
+    group: "समूह"
   },
 
   tooltip: {
@@ -33,7 +36,8 @@ export default {
   form: {
     name: "नाम",
     email: "इमेल",
-    password: "पासवर्ड"
+    password: "पासवर्ड",
+    group: "समूह"
   },
   validations : {
     required: "यो क्षेत्र आवश्यक छ",

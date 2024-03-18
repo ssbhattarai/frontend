@@ -176,8 +176,6 @@ function onRequest(props) {
 
       </q-table>
     </div>
-
-    <div>
       <ResponsiveModal
         v-model="openDialog"
         :submitting="loading"
@@ -225,7 +223,6 @@ function onRequest(props) {
           </q-form>
         </template>
       </ResponsiveModal>
-    </div>
   </q-page>
 </template>
 

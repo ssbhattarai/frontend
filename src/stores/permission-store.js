@@ -11,7 +11,7 @@ export const usePermissionStore = defineStore('permission', () => {
     get() {
       return commonStore.serverPagination
     }, set(value) {
-      console.log('server pagination value', value);
+      // console.log('server pagination value', value);
       // commonStore.setServerPagination(value);
     },
   });
@@ -23,13 +23,26 @@ export const usePermissionStore = defineStore('permission', () => {
       commonStore.query = value;
     },
   });
+
+  const formData = computed({
+    get() {
+      return commonStore.formData;
+    }, set(value) {
+      commonStore.formData = value;
+    },
+  });
   const updateStateValue = (val) => {
     commonStore.stateName = val;
+    stateName.value = val;
   };
   const loading = computed(() => commonStore.loading);
   const title = 'permissions'
 
   return {
-    fetchData: commonStore.fetchData, serverPagination, all, loading, stateName, query, title, updateStateValue
+    fetchData: commonStore.fetchData,
+    serverPagination, all, loading, stateName, query, title,
+    updateStateValue,
+    permission: formData,
+    createData: commonStore.createData
   }
 })

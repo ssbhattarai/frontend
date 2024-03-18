@@ -12,6 +12,8 @@ export default {
   record_not_found: 'Record Not Found',
   user: 'User',
   language: 'Language',
+  permissions:'Permissions',
+  permission: "Permission",
 
   table: {
     name: 'Name',
@@ -21,7 +23,8 @@ export default {
     rows_per_page: 'Rows per page: ',
     sn: 'S.N.',
     search: 'Search',
-    actions: 'Actions'
+    actions: 'Actions',
+    group: "Group"
   },
 
   tooltip: {
@@ -36,7 +39,8 @@ export default {
   form: {
     name: "Name",
     email: "Email",
-    password: "Password"
+    password: "Password",
+    group: "Group"
   },
   validations : {
     required: "This field is required",

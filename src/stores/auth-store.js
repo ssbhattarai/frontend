@@ -11,7 +11,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     fetchLoggedInUser() {
       api.get('user').then(res => {
-        this.user = res.data;
+        this.user = res.data.data;
       }).catch(error => {
           this.router.push({name: "Login"})
       })

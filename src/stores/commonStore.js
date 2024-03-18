@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import {api} from "boot/axios";
 import {computed, reactive, ref} from "vue";
+import {buildFormData} from "src/composables/buildFormData";
 
 export const useCommonStore = defineStore('common', () => {
   const commonStore = useCommonStore();
@@ -18,6 +19,7 @@ export const useCommonStore = defineStore('common', () => {
   });
   const query = ref(null);
   const filters = ref({});
+  const formData = ref({});
 
   const fetchData = () => {
     loading.value = true;
@@ -28,6 +30,7 @@ export const useCommonStore = defineStore('common', () => {
         if (val && val !== "null") return key + "=" + filters.value[key];
       })
       .join("&");
+
     return new Promise((resolve, reject) => {
       api.get(stateName.value, {
         params: {
@@ -54,6 +57,31 @@ export const useCommonStore = defineStore('common', () => {
 
 
   }
+  const createData = () =>{
+    return new Promise((resolve, reject) => {
+      const url = stateName.value + '/create';
+
+      let data = new FormData();
+      Object.keys(formData.value).forEach(key => {
+        console.log(key)
+        if (typeof formData.value[key] !== 'object'){
+          data.append(key, formData.value[key])
+        } else {
+          buildFormData(data, formData.value, key)
+        }
+      });
+
+      api.post(url, data).then(res => {
+        formData.value = {};
+
+        resolve(res);
+      }).catch(error => {
+        reject(error);
+      }).finally(() => {
+        loading.value = false;
+      })
+    });
+  }
 
   const setServerPagination = (pagination) => {
     serverPagination.value = pagination;
@@ -68,7 +96,9 @@ export const useCommonStore = defineStore('common', () => {
     loading,
     setServerPagination,
     filters,
-    query
+    query,
+    formData,
+    createData
   }
 })
 
