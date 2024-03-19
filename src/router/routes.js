@@ -21,6 +21,12 @@ const routes = [
         name: "Permission",
         meta: { requiresAuth: true },
       },
+      {
+        path: '/roles',
+        component: () => import('pages/RolesPage.vue'),
+        name: "Role",
+        meta: { requiresAuth: true },
+      },
     ],
   },
 

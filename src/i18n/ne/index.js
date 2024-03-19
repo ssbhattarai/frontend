@@ -11,6 +11,8 @@ export default {
   language: 'भाषा',
   permissions:'अनुमतिहरू',
   permission: "अनुमति",
+  do_you_want_to_delete:"तपाईं यसलाई मेटाउन चाहनुहुन्छ?",
+  confirm: "पुष्टि गर्नुहोस्",
 
   table: {
     name: 'नाम',
@@ -31,7 +33,8 @@ export default {
   },
   button: {
     cancel: "रद्द गर्नुहोस्",
-    submit: "सेब गर्नुहोस्"
+    submit: "सेब गर्नुहोस्",
+    ok: "ठिक छ"
   },
   form: {
     name: "नाम",

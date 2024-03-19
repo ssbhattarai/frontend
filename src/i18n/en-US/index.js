@@ -14,6 +14,8 @@ export default {
   language: 'Language',
   permissions:'Permissions',
   permission: "Permission",
+  do_you_want_to_delete: "Do you want to delete it?",
+  confirm: "Confirm",
 
   table: {
     name: 'Name',
@@ -34,7 +36,8 @@ export default {
   },
   button: {
     cancel: "Cancel",
-    submit: "Save"
+    submit: "Save",
+    ok: "Ok"
   },
   form: {
     name: "Name",

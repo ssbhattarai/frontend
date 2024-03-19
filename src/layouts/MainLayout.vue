@@ -232,15 +232,21 @@ export default defineComponent({
         link: "User",
         childs: [
           {
-            title: 'users',
-            icon: 'mdi-account-multiple',
-            link: "User",
-            childs: null
-          },
-          {
             title: 'permissions',
             icon: 'mdi-account-multiple',
             link: "Permission",
+            childs: null
+          },
+          {
+            title: 'roles',
+            icon: 'mdi-account-multiple',
+            link: "Role",
+            childs: null
+          },
+          {
+            title: 'users',
+            icon: 'mdi-account-multiple',
+            link: "User",
             childs: null
           }
         ],

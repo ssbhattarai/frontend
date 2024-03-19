@@ -2,7 +2,7 @@ import {defineStore} from 'pinia'
 import {useCommonStore} from "stores/commonStore";
 import {computed, reactive, ref} from "vue";
 
-export const usePermissionStore = defineStore('permission', () => {
+export const useRoleStore = defineStore('role', () => {
   const commonStore = useCommonStore();
 
   const all = computed(() => [...commonStore.all]);
@@ -42,9 +42,9 @@ export const usePermissionStore = defineStore('permission', () => {
     fetchData: commonStore.fetchData,
     serverPagination, all, loading, stateName, query, title,
     updateStateValue,
-    permission: formData,
+    role: formData,
     createData: commonStore.createData,
-    updatePermission: commonStore.updateData,
-    deletePermission: commonStore.deleteData
+    updateRole: commonStore.updateData,
+    deleteRole: commonStore.deleteData
   }
 })

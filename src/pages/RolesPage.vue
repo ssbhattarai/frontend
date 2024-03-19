@@ -1,16 +1,16 @@
 <script setup>
 import {ref} from 'vue'
 import {useI18n} from 'vue-i18n'
-import {usePermissionStore} from "stores/permission-store";
 import ResponsiveModal from "components/ResponsiveModal.vue";
 import {useCustomValidations} from "src/composables/validations";
 import { date } from 'quasar'
 import _ from 'lodash';
 import { useQuasar } from 'quasar'
+import {useRoleStore} from "stores/role-store";
 
 
-const permissionStore = usePermissionStore();
-permissionStore.updateStateValue('permissions');
+const roleStore = useRoleStore();
+roleStore.updateStateValue('roles');
 
 const {t} = useI18n()
 const {rules} = useCustomValidations();
@@ -65,7 +65,7 @@ const filter = ref('');
 
 const openDialog = ref(false);
 const loading = ref(false);
-const permission = ref(permissionStore.permission);
+const permission = ref(roleStore.permission);
 const permissionModal = ref(null);
 
 const createPermission = () => {
@@ -74,29 +74,29 @@ const createPermission = () => {
 
 const editPermission = (row) => {
   openDialog.value = true;
-  permissionStore.permission = _.clone(row);
+  roleStore.permission = _.clone(row);
 }
 
 const fetchPermissions = () => {
-  permissionStore.fetchData();
+  roleStore.fetchData();
 }
 fetchPermissions();
 
 function onRequest(props) {
   const {page, rowsPerPage, sortBy, descending} = props.pagination
 
-  permissionStore.serverPagination.page = page;
-  permissionStore.serverPagination.rowsPerPage = rowsPerPage;
+  roleStore.serverPagination.page = page;
+  roleStore.serverPagination.rowsPerPage = rowsPerPage;
   fetchPermissions();
 }
 
 const savePermission = () => {
   permissionModal.value.validate().then(success => {
     if (success) {
-      permissionStore.createData().then(res => {
+      roleStore.createData().then(res => {
         if (res.status == 201){
           openDialog.value = false;
-          permission.value = permissionStore.permission;
+          permission.value = roleStore.permission;
           fetchPermissions()
         }
       }).finally(()=> {
@@ -111,11 +111,11 @@ const savePermission = () => {
 const updatePermission = () => {
   permissionModal.value.validate().then(success => {
     if (success) {
-      const permissionId = permissionStore.permission.id;
-      permissionStore.updatePermission(permissionId).then(res => {
+      const permissionId = roleStore.permission.id;
+      roleStore.updatePermission(permissionId).then(res => {
         if (res.status == 200){
           openDialog.value = false;
-          permission.value = permissionStore.permission;
+          permission.value = roleStore.permission;
           fetchPermissions()
         }
       }).finally(()=> {
@@ -143,7 +143,7 @@ const deletePermission = (row) => {
       label: t('button.cancel')
     },
   }).onOk(data => {
-    permissionStore.deletePermission(row.id).then(res => {
+    roleStore.deletePermission(row.id).then(res => {
 
     });
   }).onCancel(() => {
@@ -161,12 +161,12 @@ const deletePermission = (row) => {
     <div class="q-pa-md">
       <q-table
         flat bordered
-        :rows="permissionStore.all"
+        :rows="roleStore.all"
         :columns="columns"
         row-key="id"
-        v-model:pagination="permissionStore.serverPagination"
-        :loading="permissionStore.loading"
-        :filter="permissionStore.query"
+        v-model:pagination="roleStore.serverPagination"
+        :loading="roleStore.loading"
+        :filter="roleStore.query"
         binary-state-sort
         @request="onRequest"
         :rows-per-page-label="$t('table.rows_per_page')"
@@ -194,9 +194,9 @@ const deletePermission = (row) => {
         </template>
         <template v-slot:top-left>
 
-          <div class="text-h6">{{ $t(permissionStore.title) }}</div>
+          <div class="text-h6">{{ $t(roleStore.title) }}</div>
           <div class="q-ml-md">
-            <q-input outlined dense debounce="300" v-model="permissionStore.query" :placeholder="$t('table.search')">
+            <q-input outlined dense debounce="300" v-model="roleStore.query" :placeholder="$t('table.search')">
               <template v-slot:append>
                 <q-icon name="search"/>
               </template>
@@ -205,10 +205,10 @@ const deletePermission = (row) => {
 
         </template>
         <template v-slot:top="props">
-          <div class="col-2 q-table__title">{{ $t(permissionStore.title) }}</div>
+          <div class="col-2 q-table__title">{{ $t(roleStore.title) }}</div>
 
           <q-space />
-            <q-input outlined dense debounce="300" v-model="permissionStore.query" :placeholder="$t('table.search')">
+            <q-input outlined dense debounce="300" v-model="roleStore.query" :placeholder="$t('table.search')">
               <template v-slot:append>
                 <q-icon name="search"/>
               </template>
@@ -241,10 +241,10 @@ const deletePermission = (row) => {
             <q-td :props="props" key="id">
               {{
 
-                permissionStore.all.indexOf(props.row) +
+                roleStore.all.indexOf(props.row) +
                 1 +
-                permissionStore.serverPagination.rowsPerPage *
-                (permissionStore.serverPagination.page - 1)
+                roleStore.serverPagination.rowsPerPage *
+                (roleStore.serverPagination.page - 1)
               }}
             </q-td>
             <q-td :props="props" key="permission">
@@ -283,11 +283,11 @@ const deletePermission = (row) => {
       v-model="openDialog"
       :submitting="loading"
       submit-button="submit"
-      @save="permissionStore.permission.id ? updatePermission() : savePermission()"
+      @save="roleStore.permission.id ? updatePermission() : savePermission()"
       :width="'900px'"
     >
       <template #title>
-        {{ permissionStore.permission.id ? $t('tooltip.edit', { name: $t('permission') }) : $t('tooltip.add', { name: $t('permission') }) }}
+        {{ roleStore.permission.id ? $t('tooltip.edit', { name: $t('permission') }) : $t('tooltip.add', { name: $t('permission') }) }}
       </template>
       <template #body>
         <q-form ref="permissionModal">
@@ -297,7 +297,7 @@ const deletePermission = (row) => {
                 <q-input
                   outlined
                   :label="$t('permission') + ' *'"
-                  v-model="permissionStore.permission.name"
+                  v-model="roleStore.permission.name"
                   :rules="[rules.required]"
                 />
               </div>
@@ -305,7 +305,7 @@ const deletePermission = (row) => {
                 <q-input
                   outlined
                   :label="$t('form.name') + ' *'"
-                  v-model="permissionStore.permission.title"
+                  v-model="roleStore.permission.title"
                   :rules="[rules.required]"
                 />
               </div>
@@ -313,7 +313,7 @@ const deletePermission = (row) => {
                 <q-input
                   outlined
                   :label="$t('form.group') + ' *'"
-                  v-model="permissionStore.permission.group"
+                  v-model="roleStore.permission.group"
                   :rules="[rules.required]"
                 />
               </div>

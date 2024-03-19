@@ -73,7 +73,6 @@ export const useCommonStore = defineStore('common', () => {
 
       api.post(url, data).then(res => {
         formData.value = {};
-
         resolve(res);
       }).catch(error => {
         reject(error);
@@ -82,6 +81,45 @@ export const useCommonStore = defineStore('common', () => {
       })
     });
   }
+
+  const updateData = (id) =>{
+    return new Promise((resolve, reject) => {
+      const url = `${stateName.value}/${id}`;
+
+      let data = new FormData();
+      Object.keys(formData.value).forEach(key => {
+        if (typeof formData.value[key] !== 'object'){
+          data.append(key, formData.value[key])
+        } else {
+          buildFormData(data, formData.value, key)
+        }
+      });
+
+      api.post(url, data).then(res => {
+          formData.value = {};
+        resolve(res);
+      }).catch(error => {
+        reject(error);
+      }).finally(() => {
+        loading.value = false;
+      })
+    });
+  }
+
+  const deleteData = (id) =>{
+    return new Promise((resolve, reject) => {
+      const url = `${stateName.value}/delete/${id}`;
+
+      api.post(url).then(res => {
+        resolve(res);
+      }).catch(error => {
+        reject(error);
+      }).finally(() => {
+        loading.value = false;
+      })
+    });
+  }
+
 
   const setServerPagination = (pagination) => {
     serverPagination.value = pagination;
@@ -98,7 +136,9 @@ export const useCommonStore = defineStore('common', () => {
     filters,
     query,
     formData,
-    createData
+    createData,
+    updateData,
+    deleteData
   }
 })
 
